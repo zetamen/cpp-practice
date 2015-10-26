@@ -1,0 +1,11 @@
+# Builds
+Debug/
+Release/
+
+# Visual C++ cache
+ipch/
+*.opensdf
+*.sdf
+
+# Visual Studio 2015 cache/options directory
+.vs/
