@@ -115,7 +115,6 @@ int main(int argc, char* argv[])
 		cout << "File \"" << argv[2] << "\" not open." << endl;
 		return 1;
 	}
-	;
 	string search = argv[3], replace = argv[4];
 	if (search.length() == 0)
 	{
