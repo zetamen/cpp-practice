@@ -7,6 +7,7 @@
 #include <string>
 #include <memory>
 #include "Map.h"
+#include "FillAlgorithm.h"
 
 using namespace std;
 
@@ -37,11 +38,11 @@ shared_ptr<Map> ReadMap(ifstream& input)
 void WriteMap(ofstream& output, shared_ptr<Map>& map)
 {
 	Map* mapPtr = map.get();
-	for (int j = 0; j < Map::HEIGHT; ++j)
+	for (int y = 0; y < Map::HEIGHT; ++y)
 	{
-		for (int i = 0; i < Map::WIDTH; ++i)
+		for (int x = 0; x < Map::WIDTH; ++x)
 		{
-			output << mapPtr->GetCharValue(i, j);
+			output << mapPtr->GetCharValue(x, y);
 		}
 		output << endl;
 	}
@@ -68,11 +69,8 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	auto map = ReadMap(input);
-	if (map == nullptr)
-	{
-		cout << "Incorrect map" << endl;
-		return 1;
-	}
+	auto fillAlgorithm = make_shared<FillAlgorithm>();
+	map.get()->ApplyAlgorithm(fillAlgorithm);
 	WriteMap(output, map);
 	return 0;
 }

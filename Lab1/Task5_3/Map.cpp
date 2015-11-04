@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "Map.h"
 
-
 Map::Map(vector<string> const& matrix)
-	:m_matrix(HEIGHT, vector<Point>(WIDTH, Point::BLANK))
+	:m_matrix(HEIGHT, vector<PointValue>(WIDTH, PointValue::BLANK))
 {
 	int height = matrix.size(),
 		width;
@@ -17,39 +16,45 @@ Map::Map(vector<string> const& matrix)
 	}
 }
 
-vector<vector<Point>> Map::GetMatrix() const
+vector<vector<PointValue>> Map::GetMatrix() const
 {
 	return m_matrix;
 }
 
-Point Map::GetPoint(char const ch) const
+PointValue Map::GetPoint(char const ch) const
 {
-	Point point;
+	PointValue point;
 	switch (ch)
 	{
 	case '#':
-		point = Point::BLOCK;
+		point = PointValue::BLOCK;
 		break;
 	case 'O':
-		point = Point::START;
+		point = PointValue::START;
+		break;
+	case '.':
+		point = PointValue::FILLED;
 		break;
 	default:
-		point = Point::BLANK;
+		point = PointValue::BLANK;
 		break;
 	}
 	return point;
 }
 
-char Map::GetChar(Point const point) const
+char Map::GetChar(PointValue const point) const
 {
 	char ch;
 	switch (point)
 	{
-	case Point::BLOCK:
+	case PointValue::BLOCK:
 		ch = '#';
 		break;
-	case Point::START:
+	case PointValue::START:
 		ch = 'O';
+		break;
+	case PointValue::FILLED:
+		ch = '.';
 		break;
 	default:
 		ch = ' ';
@@ -63,14 +68,9 @@ char Map::GetCharValue(int x, int y) const
 	return GetChar(m_matrix[y][x]);
 }
 
-int Map::GetWidth() const
+void Map::ApplyAlgorithm(shared_ptr<MapAlgorithm> algorithm)
 {
-	return m_width;
-}
-
-int Map::GetHeight() const
-{
-	return m_height;
+	algorithm.get()->Apply(m_matrix);
 }
 
 Map::~Map()
