@@ -36,6 +36,9 @@
     <ClInclude Include="Point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FileMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -47,10 +50,10 @@
     <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapAlgorithm.cpp">
+    <ClCompile Include="FillAlgorithm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FillAlgorithm.cpp">
+    <ClCompile Include="FileMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

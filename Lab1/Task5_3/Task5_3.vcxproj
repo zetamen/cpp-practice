@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FileMap.h" />
     <ClInclude Include="FillAlgorithm.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapAlgorithm.h" />
@@ -153,9 +154,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FileMap.cpp" />
     <ClCompile Include="FillAlgorithm.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MapAlgorithm.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

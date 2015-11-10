@@ -7,47 +7,10 @@
 #include <string>
 #include <memory>
 #include "Map.h"
+#include "FileMap.h"
 #include "FillAlgorithm.h"
 
 using namespace std;
-
-shared_ptr<Map> ReadMap(ifstream& input)
-{
-	vector<string> matrix;
-	string row;
-	int mapWidth = 0, mapHeight = 0, rowSize;
-	while (!input.eof() && (mapHeight < Map::HEIGHT))
-	{
-		getline(input, row);
-		rowSize = row.size();
-		if (rowSize > Map::WIDTH)
-		{
-			row = row.substr(0, Map::WIDTH);
-			rowSize = Map::WIDTH;
-		}
-		if (rowSize > mapWidth)
-		{
-			mapWidth = rowSize;
-		}
-		++mapHeight;
-		matrix.push_back(row);
-	}
-	return make_shared<Map>(matrix);
-}
-
-void WriteMap(ofstream& output, shared_ptr<Map>& map)
-{
-	Map* mapPtr = map.get();
-	for (int y = 0; y < Map::HEIGHT; ++y)
-	{
-		for (int x = 0; x < Map::WIDTH; ++x)
-		{
-			output << mapPtr->GetCharValue(x, y);
-		}
-		output << endl;
-	}
-	output << endl;
-}
 
 int main(int argc, char* argv[])
 {
@@ -68,10 +31,11 @@ int main(int argc, char* argv[])
 		cout << "File \"" << argv[2] << "\" not open." << endl;
 		return 1;
 	}
-	auto map = ReadMap(input);
+	FileMap fileMap;
+	auto map = fileMap.Read(input);
 	auto fillAlgorithm = make_shared<FillAlgorithm>();
 	map.get()->ApplyAlgorithm(fillAlgorithm);
-	WriteMap(output, map);
+	fileMap.Write(output, map);
 	return 0;
 }
 

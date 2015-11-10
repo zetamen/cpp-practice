@@ -10,11 +10,10 @@ using namespace std;
 class Map
 {
 public:
-	Map(vector<string> const& matrix);
+	Map();
 	vector<vector<PointValue>> GetMatrix() const;
-	PointValue GetPoint(char const ch) const;
-	char GetChar(PointValue const point) const;
-	char GetCharValue(int x, int y) const;
+	void SetPointValue(int x, int y, PointValue value);
+	PointValue GetPointValue(int x, int y) const;
 	void ApplyAlgorithm(shared_ptr<MapAlgorithm> algorithm);
 	~Map();
 

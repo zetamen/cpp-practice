@@ -8,8 +8,7 @@ using std::vector;
 class MapAlgorithm
 {
 public:
-	MapAlgorithm();
+	MapAlgorithm() {}
 	virtual void Apply(vector<vector<PointValue>>& matrix) = 0;
-	virtual ~MapAlgorithm();
 };
 
