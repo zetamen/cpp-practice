@@ -42,29 +42,25 @@ void FillAlgorithm::Fill(Point point, vector<vector<PointValue>>& matrix)
 	{
 		Point p = points.back();
 		points.pop_back();
-		if (matrix[p.y][p.x] == PointValue::BLANK)
-		{
-			matrix[p.y][p.x] = PointValue::FILLED;
-		}
 		if ((p.x > 0) && (matrix[p.y][p.x - 1] == PointValue::BLANK))
 		{
-			Point point(p.x - 1, p.y);
-			points.push_back(point);
+			matrix[p.y][p.x - 1] = PointValue::FILLED;
+			points.emplace_back(p.x - 1, p.y);
 		}
 		if ((p.x < Map::WIDTH - 1) && (matrix[p.y][p.x + 1] == PointValue::BLANK))
 		{
-			Point point(p.x + 1, p.y);
-			points.push_back(point);
+			matrix[p.y][p.x + 1] = PointValue::FILLED;
+			points.emplace_back(p.x + 1, p.y);
 		}
 		if ((p.y > 0) && (matrix[p.y - 1][p.x] == PointValue::BLANK))
 		{
-			Point point(p.x, p.y - 1);
-			points.push_back(point);
+			matrix[p.y - 1][p.x] = PointValue::FILLED;
+			points.emplace_back(p.x, p.y - 1);
 		}
 		if ((p.y < Map::HEIGHT - 1) && (matrix[p.y + 1][p.x] == PointValue::BLANK))
 		{
-			Point point(p.x, p.y + 1);
-			points.push_back(point);
+			matrix[p.y + 1][p.x] = PointValue::FILLED;
+			points.emplace_back(p.x, p.y + 1);
 		}
 	}
 }
