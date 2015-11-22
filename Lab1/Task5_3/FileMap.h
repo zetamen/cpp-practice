@@ -1,14 +1,10 @@
 #pragma once
 #include "Map.h"
 
-class FileMap
+namespace FileMap
 {
-public:
-	FileMap();
 	shared_ptr<Map> Read(ifstream& input);
 	void Write(ofstream& output, shared_ptr<Map> const& map);
-	PointValue GetPoint(char const ch) const;
-	char GetChar(PointValue const point) const;
-	~FileMap();
-};
-
+	PointValue GetPoint(char const ch);
+	char GetChar(PointValue const point);
+}

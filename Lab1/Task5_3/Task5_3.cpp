@@ -31,8 +31,7 @@ int main(int argc, char* argv[])
 		cout << "File \"" << argv[2] << "\" not open." << endl;
 		return 1;
 	}
-	FileMap fileMap;
-	auto map = fileMap.Read(input);
+	auto map = FileMap::Read(input);
 	if (map == nullptr)
 	{
 		cout << "Map is incorrect" << endl;
@@ -40,7 +39,7 @@ int main(int argc, char* argv[])
 	}
 	auto fillAlgorithm = make_shared<FillAlgorithm>();
 	map.get()->ApplyAlgorithm(fillAlgorithm);
-	fileMap.Write(output, map);
+	FileMap::Write(output, map);
 	return 0;
 }
 
