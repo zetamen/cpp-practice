@@ -10,5 +10,6 @@ class MapAlgorithm
 public:
 	MapAlgorithm() {}
 	virtual void Apply(vector<vector<PointValue>>& matrix) = 0;
+	virtual ~MapAlgorithm() {}
 };
 
