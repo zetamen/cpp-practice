@@ -2,21 +2,21 @@
 #include "Map.h"
 
 Map::Map()
-	:m_matrix(HEIGHT, vector<PointValue>(WIDTH, PointValue::BLANK))
+	:m_matrix(HEIGHT, vector<PointType>(WIDTH, PointType::BLANK))
 {
 }
 
-vector<vector<PointValue>> Map::GetMatrix() const
+vector<vector<PointType>> Map::GetMatrix() const
 {
 	return m_matrix;
 }
 
-void Map::SetPointValue(int x, int y, PointValue value)
+void Map::SetPointType(int x, int y, PointType value)
 {
 	m_matrix[y][x] = value;
 }
 
-PointValue Map::GetPointValue(int x, int y) const
+PointType Map::GetPointType(int x, int y) const
 {
 	return m_matrix[y][x];
 }

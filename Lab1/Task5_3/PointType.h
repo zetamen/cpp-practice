@@ -1,6 +1,6 @@
 #pragma once
 
-enum class PointValue
+enum class PointType
 {
 	BLANK,
 	START,

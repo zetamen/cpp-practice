@@ -20,7 +20,7 @@ vector<Point> FillAlgorithm::GetStartPoints(Map const* map)
 	{
 		for (int x = 0; x < Map::WIDTH; ++x)
 		{
-			if (map->GetPointValue(x, y) == PointValue::START)
+			if (map->GetPointType(x, y) == PointType::START)
 			{
 				startPoints.emplace_back(x, y);
 			}
@@ -36,24 +36,24 @@ void FillAlgorithm::Fill(Point point, Map* const map)
 	{
 		Point p = points.back();
 		points.pop_back();
-		if ((p.x > 0) && (map->GetPointValue(p.x - 1, p.y) == PointValue::BLANK))
+		if ((p.x > 0) && (map->GetPointType(p.x - 1, p.y) == PointType::BLANK))
 		{
-			map->SetPointValue(p.x - 1, p.y, PointValue::FILLED);
+			map->SetPointType(p.x - 1, p.y, PointType::FILLED);
 			points.emplace_back(p.x - 1, p.y);
 		}
-		if ((p.x < Map::WIDTH - 1) && (map->GetPointValue(p.x + 1, p.y) == PointValue::BLANK))
+		if ((p.x < Map::WIDTH - 1) && (map->GetPointType(p.x + 1, p.y) == PointType::BLANK))
 		{
-			map->SetPointValue(p.x + 1, p.y, PointValue::FILLED);
+			map->SetPointType(p.x + 1, p.y, PointType::FILLED);
 			points.emplace_back(p.x + 1, p.y);
 		}
-		if ((p.y > 0) && (map->GetPointValue(p.x, p.y - 1) == PointValue::BLANK))
+		if ((p.y > 0) && (map->GetPointType(p.x, p.y - 1) == PointType::BLANK))
 		{
-			map->SetPointValue(p.x, p.y - 1, PointValue::FILLED);
+			map->SetPointType(p.x, p.y - 1, PointType::FILLED);
 			points.emplace_back(p.x, p.y - 1);
 		}
-		if ((p.y < Map::HEIGHT - 1) && (map->GetPointValue(p.x, p.y + 1) == PointValue::BLANK))
+		if ((p.y < Map::HEIGHT - 1) && (map->GetPointType(p.x, p.y + 1) == PointType::BLANK))
 		{
-			map->SetPointValue(p.x, p.y + 1, PointValue::FILLED);
+			map->SetPointType(p.x, p.y + 1, PointType::FILLED);
 			points.emplace_back(p.x, p.y + 1);
 		}
 	}

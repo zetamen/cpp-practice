@@ -21,7 +21,7 @@ namespace FileMap
 			rowSize = (row.size() > Map::WIDTH) ? Map::WIDTH : row.size();
 			for (i = 0; i < rowSize; ++i)
 			{
-				map->SetPointValue(i, height, GetPoint(row[i]));
+				map->SetPointType(i, height, GetPoint(row[i]));
 			}
 			++height;
 		}
@@ -34,46 +34,46 @@ namespace FileMap
 		{
 			for (int x = 0; x < Map::WIDTH; ++x)
 			{
-				output << GetChar(map->GetPointValue(x, y));
+				output << GetChar(map->GetPointType(x, y));
 			}
 			output << endl;
 		}
 		output << endl;
 	}
 
-	PointValue GetPoint(char ch)
+	PointType GetPoint(char ch)
 	{
-		PointValue point;
+		PointType point;
 		switch (ch)
 		{
 		case '#':
-			point = PointValue::BLOCK;
+			point = PointType::BLOCK;
 			break;
 		case 'O':
-			point = PointValue::START;
+			point = PointType::START;
 			break;
 		case '.':
-			point = PointValue::FILLED;
+			point = PointType::FILLED;
 			break;
 		default:
-			point = PointValue::BLANK;
+			point = PointType::BLANK;
 			break;
 		}
 		return point;
 	}
 
-	char GetChar(PointValue const& point)
+	char GetChar(PointType const& point)
 	{
 		char ch;
 		switch (point)
 		{
-		case PointValue::BLOCK:
+		case PointType::BLOCK:
 			ch = '#';
 			break;
-		case PointValue::START:
+		case PointType::START:
 			ch = 'O';
 			break;
-		case PointValue::FILLED:
+		case PointType::FILLED:
 			ch = '.';
 			break;
 		default:
