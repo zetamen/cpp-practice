@@ -24,9 +24,6 @@
     <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MapAlgorithm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FillAlgorithm.h">
       <Filter>Header Files</Filter>
     </ClInclude>

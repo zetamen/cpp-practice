@@ -21,11 +21,6 @@ PointValue Map::GetPointValue(int x, int y) const
 	return m_matrix[y][x];
 }
 
-void Map::ApplyAlgorithm(shared_ptr<MapAlgorithm> algorithm)
-{
-	algorithm.get()->Apply(m_matrix);
-}
-
 Map::~Map()
 {
 }

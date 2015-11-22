@@ -37,9 +37,8 @@ int main(int argc, char* argv[])
 		cout << "Map is incorrect" << endl;
 		return 1;
 	}
-	auto fillAlgorithm = make_shared<FillAlgorithm>();
-	map.get()->ApplyAlgorithm(fillAlgorithm);
-	FileMap::Write(output, map);
+	FillAlgorithm::Apply(map.get());
+	FileMap::Write(output, map.get());
 	return 0;
 }
 

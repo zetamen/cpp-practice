@@ -147,7 +147,6 @@
     <ClInclude Include="FileMap.h" />
     <ClInclude Include="FillAlgorithm.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="MapAlgorithm.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="PointValue.h" />
     <ClInclude Include="stdafx.h" />

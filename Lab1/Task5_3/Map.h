@@ -3,7 +3,6 @@
 #include <vector>
 #include <memory>
 #include "PointValue.h"
-#include "MapAlgorithm.h"
 
 using namespace std;
 
@@ -14,7 +13,6 @@ public:
 	vector<vector<PointValue>> GetMatrix() const;
 	void SetPointValue(int x, int y, PointValue value);
 	PointValue GetPointValue(int x, int y) const;
-	void ApplyAlgorithm(shared_ptr<MapAlgorithm> algorithm);
 	~Map();
 
 	static const int WIDTH = 100;

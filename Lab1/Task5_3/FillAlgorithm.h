@@ -1,15 +1,16 @@
 #pragma once
-#include "MapAlgorithm.h"
+#include <vector>
+#include "Map.h"
 #include "Point.h"
 
-class FillAlgorithm: public MapAlgorithm
+using namespace std;
+
+class FillAlgorithm
 {
 public:
-	FillAlgorithm();
-	void Apply(vector<vector<PointValue>>& matrix);
-	virtual ~FillAlgorithm();
+	static void Apply(Map* map);
 private:
-	vector<Point> GetStartPoints(vector<vector<PointValue>> const& matrix) const;
-	void Fill(Point point, vector<vector<PointValue>>& matrix);
+	static vector<Point> GetStartPoints(Map const* map);
+	static void Fill(Point point, Map* const map);
 };
 

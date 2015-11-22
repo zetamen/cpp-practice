@@ -5,7 +5,7 @@
 
 namespace FileMap
 {
-	shared_ptr<Map> Read(ifstream& input)
+	unique_ptr<Map> Read(ifstream& input)
 	{
 		vector<string> matrix;
 		string row;
@@ -13,8 +13,7 @@ namespace FileMap
 		{
 			return nullptr;
 		}
-		auto map = make_shared<Map>();
-		auto mapPtr = map.get();
+		auto map = make_unique<Map>();
 		int height = 0, rowSize = 0, i;
 		while (!input.eof() && (height < Map::HEIGHT))
 		{
@@ -22,28 +21,27 @@ namespace FileMap
 			rowSize = (row.size() > Map::WIDTH) ? Map::WIDTH : row.size();
 			for (i = 0; i < rowSize; ++i)
 			{
-				mapPtr->SetPointValue(i, height, GetPoint(row[i]));
+				map->SetPointValue(i, height, GetPoint(row[i]));
 			}
 			++height;
 		}
 		return map;
 	}
 
-	void Write(ofstream & output, shared_ptr<Map> const& map)
+	void Write(ofstream & output, Map const* map)
 	{
-		Map* mapPtr = map.get();
 		for (int y = 0; y < Map::HEIGHT; ++y)
 		{
 			for (int x = 0; x < Map::WIDTH; ++x)
 			{
-				output << GetChar(mapPtr->GetPointValue(x, y));
+				output << GetChar(map->GetPointValue(x, y));
 			}
 			output << endl;
 		}
 		output << endl;
 	}
 
-	PointValue GetPoint(char const ch)
+	PointValue GetPoint(char ch)
 	{
 		PointValue point;
 		switch (ch)
@@ -64,7 +62,7 @@ namespace FileMap
 		return point;
 	}
 
-	char GetChar(PointValue const point)
+	char GetChar(PointValue const& point)
 	{
 		char ch;
 		switch (point)
