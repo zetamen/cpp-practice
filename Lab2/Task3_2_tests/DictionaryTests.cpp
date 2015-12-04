@@ -29,4 +29,29 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 		BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict"));
 	}
 
+	struct SportDictionaryFixture
+	{
+		SportDictionaryFixture()
+		{
+			dictionary.LoadFromFile("db/sport.dict");
+		}
+
+		CDictionary dictionary;
+	};
+
+	BOOST_FIXTURE_TEST_SUITE(when_database_loaded_from_file, SportDictionaryFixture)
+
+		BOOST_AUTO_TEST_CASE(find_translation_from_file)
+		{
+			auto translation = dictionary.Find("football");
+			BOOST_CHECK(translation);
+			BOOST_CHECK_EQUAL(translation.value(), "футбол");
+			translation = dictionary.Find("hockey");
+			BOOST_CHECK(translation);
+			BOOST_CHECK_EQUAL(translation.value(), "хоккей");
+			BOOST_CHECK(!dictionary.Find("tennis"));
+		}
+
+	BOOST_AUTO_TEST_SUITE_END()
+
 BOOST_AUTO_TEST_SUITE_END()

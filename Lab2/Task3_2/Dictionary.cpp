@@ -28,7 +28,20 @@ boost::optional<string> CDictionary::Find(string const & source) const
 bool CDictionary::LoadFromFile(string const & filePath)
 {
 	ifstream file(filePath);
-	return file.is_open();
+	if (!file.is_open())
+	{
+		return false;
+	}
+	string line;
+	while (!file.eof())
+	{
+		getline(file, line);
+		auto separatorIndex = line.find('=');
+		string source = line.substr(0, separatorIndex);
+		string translation = line.substr(separatorIndex + 1, line.length() - (separatorIndex + 1));
+		Add(source, translation);
+	}
+	return true;
 }
 
 CDictionary::~CDictionary()
