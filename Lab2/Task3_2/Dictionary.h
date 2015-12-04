@@ -12,7 +12,7 @@ public:
 	CDictionary();
 	bool Add(string const& source, string const& translation);
 	boost::optional<string> Find(string const& source) const;
-	bool LoadFromFile(string const& filePath);
+	bool LoadFromFile(string const& filePath, string& errorMessage);
 	~CDictionary();
 private:
 	map<string, string> m_dictionary;

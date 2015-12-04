@@ -27,25 +27,44 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 
 	BOOST_AUTO_TEST_CASE(can_load_translations_from_file)
 	{
-		BOOST_CHECK(!dictionary.LoadFromFile("db/not_exists_file.dict"));
-		BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict"));
+		string errorMessage;
+		BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict", errorMessage));
 	}
 
-	BOOST_AUTO_TEST_CASE(signal_if_database_has_empty_lines)
+	struct DictionaryLoadingErrorFixture
 	{
-		BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_empty_lines.dict"));
-	}
+		string errorMessage;
+		CDictionary dictionary;
+	};
 
-	BOOST_AUTO_TEST_CASE(signal_if_database_has_incorrect_data)
-	{
-		BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_incorrect_data.dict"));
-	}
+	BOOST_FIXTURE_TEST_SUITE(when_cant_load_data_from_file, DictionaryLoadingErrorFixture)
+
+		BOOST_AUTO_TEST_CASE(signal_if_file_not_exists)
+		{
+			BOOST_CHECK(!dictionary.LoadFromFile("db/not_exists_file.dict", errorMessage));
+			BOOST_CHECK_EQUAL(errorMessage, "Could not open file");
+		}
+
+		BOOST_AUTO_TEST_CASE(signal_if_database_has_empty_lines)
+		{
+			BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_empty_lines.dict", errorMessage));
+			BOOST_CHECK_EQUAL(errorMessage, "Database damaged: has empty lines");
+		}
+
+		BOOST_AUTO_TEST_CASE(signal_if_database_has_incorrect_data)
+		{
+			BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_incorrect_data.dict", errorMessage));
+			BOOST_CHECK_EQUAL(errorMessage, "Database damaged: has incorrect data");
+		}
+
+	BOOST_AUTO_TEST_SUITE_END()
 
 	struct SportDictionaryFixture
 	{
 		SportDictionaryFixture()
 		{
-			dictionary.LoadFromFile("db/sport.dict");
+			string errorMessage;
+			dictionary.LoadFromFile("db/sport.dict", errorMessage);
 		}
 
 		CDictionary dictionary;

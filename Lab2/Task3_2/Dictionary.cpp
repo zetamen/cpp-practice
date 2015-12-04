@@ -25,11 +25,12 @@ boost::optional<string> CDictionary::Find(string const& source) const
 	return boost::none;
 }
 
-bool CDictionary::LoadFromFile(string const& filePath)
+bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 {
 	ifstream file(filePath);
 	if (!file.is_open())
 	{
+		errorMessage = "Could not open file";
 		return false;
 	}
 	string line;
@@ -42,11 +43,13 @@ bool CDictionary::LoadFromFile(string const& filePath)
 			{
 				return true;
 			}
+			errorMessage = "Database damaged: has empty lines";
 			return false;
 		}
 		auto separatorIndex = line.find('=');
 		if (separatorIndex == string::npos)
 		{
+			errorMessage = "Database damaged: has incorrect data";
 			return false;
 		}
 		string source = line.substr(0, separatorIndex);
