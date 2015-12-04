@@ -54,7 +54,11 @@ bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 		}
 		string source = line.substr(0, separatorIndex);
 		string translation = line.substr(separatorIndex + 1, line.length() - (separatorIndex + 1));
-		Add(source, translation);
+		if (!Add(source, translation))
+		{
+			errorMessage = "Database damaged: has duplicate keys";
+			return false;
+		}
 	}
 	return true;
 }

@@ -57,6 +57,12 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 			BOOST_CHECK_EQUAL(errorMessage, "Database damaged: has incorrect data");
 		}
 
+		BOOST_AUTO_TEST_CASE(signal_if_database_has_duplicate_keys)
+		{
+			BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict", errorMessage));
+			BOOST_CHECK(!dictionary.LoadFromFile("db/sport.dict", errorMessage));
+			BOOST_CHECK_EQUAL(errorMessage, "Database damaged: has duplicate keys");
+		}
 	BOOST_AUTO_TEST_SUITE_END()
 
 	struct SportDictionaryFixture
