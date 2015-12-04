@@ -36,6 +36,11 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 		BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_empty_lines.dict"));
 	}
 
+	BOOST_AUTO_TEST_CASE(signal_if_database_has_incorrect_data)
+	{
+		BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_incorrect_data.dict"));
+	}
+
 	struct SportDictionaryFixture
 	{
 		SportDictionaryFixture()

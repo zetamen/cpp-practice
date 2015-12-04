@@ -45,6 +45,10 @@ bool CDictionary::LoadFromFile(string const& filePath)
 			return false;
 		}
 		auto separatorIndex = line.find('=');
+		if (separatorIndex == string::npos)
+		{
+			return false;
+		}
 		string source = line.substr(0, separatorIndex);
 		string translation = line.substr(separatorIndex + 1, line.length() - (separatorIndex + 1));
 		Add(source, translation);
