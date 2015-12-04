@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Dictionary.h"
 #include <fstream>
+#include <boost\filesystem.hpp>
 
 using std::ifstream;
 
@@ -28,6 +29,10 @@ boost::optional<string> CDictionary::Find(string const& source) const
 bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 {
 	m_dictionary.clear();
+	if (!boost::filesystem::exists(filePath))
+	{
+		return true;
+	}
 	ifstream file(filePath);
 	if (!file.is_open())
 	{

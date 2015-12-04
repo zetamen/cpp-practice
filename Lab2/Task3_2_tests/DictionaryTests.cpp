@@ -25,24 +25,22 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 		BOOST_CHECK_EQUAL(translation.value(), "футбол");
 	}
 
-	BOOST_AUTO_TEST_CASE(can_load_translations_from_file)
+	struct DictionaryLoadFixture : DictionaryFixture
 	{
 		string errorMessage;
-		BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict", errorMessage));
-	}
-
-	struct DictionaryLoadingErrorFixture
-	{
-		string errorMessage;
-		CDictionary dictionary;
 	};
 
-	BOOST_FIXTURE_TEST_SUITE(when_cant_load_data_from_file, DictionaryLoadingErrorFixture)
+	BOOST_FIXTURE_TEST_SUITE(can_load_translations_from_file, DictionaryLoadFixture)
 
-		BOOST_AUTO_TEST_CASE(signal_if_file_not_exists)
+		BOOST_AUTO_TEST_CASE(if_file_exists)
 		{
-			BOOST_CHECK(!dictionary.LoadFromFile("db/not_exists_file.dict", errorMessage));
-			BOOST_CHECK_EQUAL(errorMessage, "Could not open file");
+			BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict", errorMessage));
+		}
+
+		BOOST_AUTO_TEST_CASE(save_path_if_file_not_exists)
+		{
+			string errorMessage;
+			BOOST_CHECK(dictionary.LoadFromFile("db/sport_new.dict", errorMessage));
 		}
 
 		BOOST_AUTO_TEST_CASE(signal_if_database_has_empty_lines)
@@ -62,22 +60,21 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 			BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_duplicate_keys.dict", errorMessage));
 			BOOST_CHECK_EQUAL(errorMessage, "Database damaged: has duplicate keys");
 		}
-	BOOST_AUTO_TEST_SUITE_END()
 
-	struct SportDictionaryFixture
-	{
-		SportDictionaryFixture()
+		struct SportDictionaryFixture
 		{
-			string errorMessage;
-			dictionary.LoadFromFile("db/sport.dict", errorMessage);
-		}
+			SportDictionaryFixture()
+			{
+				string errorMessage;
+				dictionary.LoadFromFile("db/sport.dict", errorMessage);
+			}
 
-		CDictionary dictionary;
-	};
+			CDictionary dictionary;
+		};
 
-	BOOST_FIXTURE_TEST_SUITE(when_database_loaded_from_file, SportDictionaryFixture)
+		BOOST_FIXTURE_TEST_SUITE(when_database_loaded_from_file, SportDictionaryFixture)
 
-		BOOST_AUTO_TEST_CASE(find_translation_from_file)
+			BOOST_AUTO_TEST_CASE(find_translation_from_file)
 		{
 			auto translation = dictionary.Find("football");
 			BOOST_CHECK(translation);
@@ -93,8 +90,10 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 			string errorMessage;
 			BOOST_CHECK(dictionary.LoadFromFile("db/clothes.dict", errorMessage));
 			BOOST_CHECK(!dictionary.Find("football"));
-
 		}
+
+		BOOST_AUTO_TEST_SUITE_END()
+
 	BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE_END()
