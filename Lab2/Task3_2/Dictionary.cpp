@@ -2,6 +2,8 @@
 #include "Dictionary.h"
 #include <fstream>
 
+using std::ifstream;
+
 
 CDictionary::CDictionary()
 {
@@ -21,6 +23,12 @@ boost::optional<string> CDictionary::Find(string const & source) const
 		return it->second;
 	}
 	return boost::none;
+}
+
+bool CDictionary::LoadFromFile(string const & filePath)
+{
+	ifstream file(filePath);
+	return file.is_open();
 }
 
 CDictionary::~CDictionary()

@@ -23,4 +23,10 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 		BOOST_CHECK_EQUAL(translation.value(), "футбол");
 	}
 
+	BOOST_AUTO_TEST_CASE(can_load_translations_from_file)
+	{
+		BOOST_CHECK(!dictionary.LoadFromFile("db/not_exists_file.dict"));
+		BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict"));
+	}
+
 BOOST_AUTO_TEST_SUITE_END()
