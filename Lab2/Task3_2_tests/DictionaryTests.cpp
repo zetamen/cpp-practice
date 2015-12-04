@@ -59,8 +59,7 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 
 		BOOST_AUTO_TEST_CASE(signal_if_database_has_duplicate_keys)
 		{
-			BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict", errorMessage));
-			BOOST_CHECK(!dictionary.LoadFromFile("db/sport.dict", errorMessage));
+			BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_duplicate_keys.dict", errorMessage));
 			BOOST_CHECK_EQUAL(errorMessage, "Database damaged: has duplicate keys");
 		}
 	BOOST_AUTO_TEST_SUITE_END()
@@ -89,6 +88,13 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 			BOOST_CHECK(!dictionary.Find("tennis"));
 		}
 
+		BOOST_AUTO_TEST_CASE(when_load_again_old_data_is_clear)
+		{
+			string errorMessage;
+			BOOST_CHECK(dictionary.LoadFromFile("db/clothes.dict", errorMessage));
+			BOOST_CHECK(!dictionary.Find("football"));
+
+		}
 	BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE_END()
