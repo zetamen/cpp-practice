@@ -13,6 +13,16 @@ bool CDictionary::Add(string const & source, string const & translation)
 	return result.second;
 }
 
+boost::optional<string> CDictionary::Find(string const & source) const
+{
+	auto it = m_dictionary.find(source);
+	if (it != m_dictionary.end())
+	{
+		return it->second;
+	}
+	return boost::none;
+}
+
 CDictionary::~CDictionary()
 {
 }
