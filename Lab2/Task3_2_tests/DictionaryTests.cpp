@@ -1,6 +1,8 @@
 ﻿#include "stdafx.h"
 #include "../Task3_2/Dictionary.cpp"
 
+using namespace std;
+
 struct DictionaryFixture
 {
 	CDictionary dictionary;
@@ -27,6 +29,11 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 	{
 		BOOST_CHECK(!dictionary.LoadFromFile("db/not_exists_file.dict"));
 		BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict"));
+	}
+
+	BOOST_AUTO_TEST_CASE(signal_if_database_has_empty_lines)
+	{
+		BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_empty_lines.dict"));
 	}
 
 	struct SportDictionaryFixture
