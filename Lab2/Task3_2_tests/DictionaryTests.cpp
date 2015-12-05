@@ -96,6 +96,7 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 	{
 		SportNewDictionaryFixture()
 		{
+			boost::filesystem::remove("db/sport_new.dict");
 			dictionary.LoadFromFile("db/sport_new.dict", errorMessage);
 		}
 	};
@@ -116,6 +117,17 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 		{
 			BOOST_CHECK(!dictionary.Save(errorMessage));
 			BOOST_CHECK_EQUAL(errorMessage, "Dictionary is empty");
+		}
+
+		BOOST_AUTO_TEST_CASE(new_translations)
+		{
+			BOOST_CHECK(dictionary.Add("soccer", "классический футбол"));
+			BOOST_CHECK(dictionary.Add("basketball", "баскетбол"));
+			BOOST_CHECK(dictionary.Save(errorMessage));
+			dictionary.LoadFromFile("db/sport_new.dict", errorMessage);
+			auto translation = dictionary.Find("soccer");
+			BOOST_CHECK(translation);
+			BOOST_CHECK_EQUAL(translation.value(), "классический футбол");
 		}
 
 	BOOST_AUTO_TEST_SUITE_END()

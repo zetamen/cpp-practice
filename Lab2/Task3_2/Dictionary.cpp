@@ -3,8 +3,6 @@
 #include <fstream>
 #include <boost\filesystem.hpp>
 
-using std::ifstream;
-
 
 CDictionary::CDictionary()
 {
@@ -35,7 +33,7 @@ bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 		m_filePath = filePath;
 		return true;
 	}
-	ifstream file(filePath);
+	std::ifstream file(filePath);
 	if (!file.is_open())
 	{
 		errorMessage = "Could not open file";
@@ -84,6 +82,21 @@ bool CDictionary::Save(string& errorMessage) const
 		errorMessage = "Dictionary is empty";
 		return false;
 	}
+	std::ofstream file(m_filePath);
+	if (!file.is_open())
+	{
+		errorMessage = "Could not open file";
+		return false;
+	}
+	std::transform(
+		m_dictionary.begin(),
+		m_dictionary.end(),
+		std::ostream_iterator<string>(file),
+		[](const std::pair<string, string>& data)
+		{
+			return data.first + '=' + data.second + '\n';
+		}
+	);
 	return true;
 }
 
