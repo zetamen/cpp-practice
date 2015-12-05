@@ -29,8 +29,10 @@ boost::optional<string> CDictionary::Find(string const& source) const
 bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 {
 	m_dictionary.clear();
+	m_filePath.clear();
 	if (!boost::filesystem::exists(filePath))
 	{
+		m_filePath = filePath;
 		return true;
 	}
 	ifstream file(filePath);
@@ -39,6 +41,7 @@ bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 		errorMessage = "Could not open file";
 		return false;
 	}
+	m_filePath = filePath;
 	string line;
 	while (!file.eof())
 	{
@@ -65,6 +68,16 @@ bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 			errorMessage = "Database damaged: has duplicate keys";
 			return false;
 		}
+	}
+	return true;
+}
+
+bool CDictionary::Save(string& errorMessage) const
+{
+	if (m_filePath.empty())
+	{
+		errorMessage = "Before save need load file";
+		return false;
 	}
 	return true;
 }

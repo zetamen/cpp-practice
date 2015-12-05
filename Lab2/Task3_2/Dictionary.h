@@ -13,8 +13,10 @@ public:
 	bool Add(string const& source, string const& translation);
 	boost::optional<string> Find(string const& source) const;
 	bool LoadFromFile(string const& filePath, string& errorMessage);
+	bool Save(string& errorMessage) const;
 	~CDictionary();
 private:
 	map<string, string> m_dictionary;
+	string m_filePath;
 };
 

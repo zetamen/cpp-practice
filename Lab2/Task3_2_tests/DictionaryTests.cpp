@@ -25,7 +25,7 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 		BOOST_CHECK_EQUAL(translation.value(), "футбол");
 	}
 
-	struct DictionaryLoadFixture : DictionaryFixture
+	struct DictionaryLoadFixture: DictionaryFixture
 	{
 		string errorMessage;
 	};
@@ -61,38 +61,56 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 			BOOST_CHECK_EQUAL(errorMessage, "Database damaged: has duplicate keys");
 		}
 
-		struct SportDictionaryFixture
+		struct SportDictionaryFixture: DictionaryLoadFixture
 		{
 			SportDictionaryFixture()
 			{
-				string errorMessage;
 				dictionary.LoadFromFile("db/sport.dict", errorMessage);
 			}
-
-			CDictionary dictionary;
 		};
 
 		BOOST_FIXTURE_TEST_SUITE(when_database_loaded_from_file, SportDictionaryFixture)
 
 			BOOST_AUTO_TEST_CASE(find_translation_from_file)
-		{
-			auto translation = dictionary.Find("football");
-			BOOST_CHECK(translation);
-			BOOST_CHECK_EQUAL(translation.value(), "футбол");
-			translation = dictionary.Find("hockey");
-			BOOST_CHECK(translation);
-			BOOST_CHECK_EQUAL(translation.value(), "хоккей");
-			BOOST_CHECK(!dictionary.Find("tennis"));
-		}
+			{
+				auto translation = dictionary.Find("football");
+				BOOST_CHECK(translation);
+				BOOST_CHECK_EQUAL(translation.value(), "футбол");
+				translation = dictionary.Find("hockey");
+				BOOST_CHECK(translation);
+				BOOST_CHECK_EQUAL(translation.value(), "хоккей");
+				BOOST_CHECK(!dictionary.Find("tennis"));
+			}
 
-		BOOST_AUTO_TEST_CASE(when_load_again_old_data_is_clear)
-		{
-			string errorMessage;
-			BOOST_CHECK(dictionary.LoadFromFile("db/clothes.dict", errorMessage));
-			BOOST_CHECK(!dictionary.Find("football"));
-		}
+			BOOST_AUTO_TEST_CASE(when_load_again_old_data_is_clear)
+			{
+				BOOST_CHECK(dictionary.LoadFromFile("db/clothes.dict", errorMessage));
+				BOOST_CHECK(!dictionary.Find("football"));
+			}
 
 		BOOST_AUTO_TEST_SUITE_END()
+
+	BOOST_AUTO_TEST_SUITE_END()
+
+	struct SportNewDictionaryFixture: DictionaryLoadFixture
+	{
+		SportNewDictionaryFixture()
+		{
+			dictionary.LoadFromFile("db/sport_new.dict", errorMessage);
+		}
+	};
+
+	BOOST_FIXTURE_TEST_SUITE(can_save_translations_to_file, SportNewDictionaryFixture)
+
+		BOOST_AUTO_TEST_CASE(if_before_load)
+		{
+			CDictionary newDictionary;
+			newDictionary.LoadFromFile("db/sport.dict", errorMessage);
+			BOOST_CHECK(newDictionary.Save(errorMessage));
+			CDictionary tempDictionary;
+			BOOST_CHECK(!tempDictionary.Save(errorMessage));
+			BOOST_CHECK_EQUAL(errorMessage, "Before save need load file");
+		}
 
 	BOOST_AUTO_TEST_SUITE_END()
 
