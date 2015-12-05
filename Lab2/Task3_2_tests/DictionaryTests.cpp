@@ -112,6 +112,12 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 			BOOST_CHECK_EQUAL(errorMessage, "Before save need load file");
 		}
 
+		BOOST_AUTO_TEST_CASE(cant_save_if_empty)
+		{
+			BOOST_CHECK(!dictionary.Save(errorMessage));
+			BOOST_CHECK_EQUAL(errorMessage, "Dictionary is empty");
+		}
+
 	BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE_END()

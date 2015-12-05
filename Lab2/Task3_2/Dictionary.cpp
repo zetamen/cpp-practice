@@ -79,6 +79,11 @@ bool CDictionary::Save(string& errorMessage) const
 		errorMessage = "Before save need load file";
 		return false;
 	}
+	if (m_dictionary.empty())
+	{
+		errorMessage = "Dictionary is empty";
+		return false;
+	}
 	return true;
 }
 
