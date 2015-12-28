@@ -37,6 +37,7 @@ boost::optional<string> CDictionary::Find(string const& source) const
 bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 {
 	m_dictionary.clear();
+	m_newWords.clear();
 	m_filePath.clear();
 	if (!boost::filesystem::exists(filePath))
 	{
@@ -84,6 +85,7 @@ bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 bool CDictionary::Create(string const& filePath, string& errorMessage)
 {
 	m_dictionary.clear();
+	m_newWords.clear();
 	if (boost::filesystem::exists(filePath))
 	{
 		errorMessage = "Dictionary is exists";

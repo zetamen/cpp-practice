@@ -47,8 +47,10 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 			boost::filesystem::remove("db/sport_new_dictionary.dict");
 			BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict", errorMessage));
 			BOOST_CHECK(dictionary.Find("football"));
+			BOOST_CHECK(dictionary.Add("tennis", "теннис"));
 			BOOST_CHECK(dictionary.Create("db/sport_new_dictionary.dict", errorMessage));
 			BOOST_CHECK(!dictionary.Find("football"));
+			BOOST_CHECK(!dictionary.Find("tennis"));
 		}
 
 		BOOST_AUTO_TEST_CASE(check_if_file_is_not_exists)
@@ -110,8 +112,10 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 		{
 			BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict", errorMessage));
 			BOOST_CHECK(dictionary.Find("football"));
+			BOOST_CHECK(dictionary.Add("tennis", "теннис"));
 			BOOST_CHECK(dictionary.LoadFromFile("db/clothes.dict", errorMessage));
 			BOOST_CHECK(!dictionary.Find("football"));
+			BOOST_CHECK(!dictionary.Find("tennis"));
 		}
 
 		BOOST_AUTO_TEST_CASE(check_if_file_exists)
