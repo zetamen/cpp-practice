@@ -6,6 +6,7 @@ using namespace std;
 struct DictionaryFixture
 {
 	CDictionary dictionary;
+	string errorMessage;
 };
 
 BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
@@ -15,17 +16,21 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 		BOOST_CHECK(!dictionary.Find("football"));
 	}
 
-	BOOST_AUTO_TEST_CASE(cant_save_if_dont_loading)
+	BOOST_AUTO_TEST_CASE(cant_save_if_dont_loaded)
 	{
-		string errorMessage;
-		CDictionary tempDictionary;
-		BOOST_CHECK(!tempDictionary.Save(errorMessage));
-		BOOST_CHECK_EQUAL(errorMessage, "Before save need load file");
+		BOOST_CHECK(!dictionary.Save(errorMessage));
+		BOOST_CHECK_EQUAL(errorMessage, "Before save need load or create file");
 	}
 
-	BOOST_AUTO_TEST_CASE(can_create_new)
+	BOOST_AUTO_TEST_CASE(cant_save_if_dont_created)
 	{
-		string errorMessage;
+		BOOST_CHECK(dictionary.Create("db/new_dict.dict", errorMessage));
+		BOOST_CHECK(!dictionary.Save(errorMessage));
+		BOOST_CHECK_EQUAL(errorMessage, "Before save need load or create file");
+	}
+
+	BOOST_AUTO_TEST_CASE(can_create_new_file)
+	{
 		BOOST_CHECK(dictionary.Create("db/new_dict.dict", errorMessage));
 	}
 
@@ -50,12 +55,15 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 
 	BOOST_AUTO_TEST_SUITE_END()
 
-	struct DictionaryLoadFixture: DictionaryFixture
-	{
-		string errorMessage;
-	};
+	BOOST_FIXTURE_TEST_SUITE(when_loading, DictionaryFixture)
 
-	BOOST_FIXTURE_TEST_SUITE(when_loading, DictionaryLoadFixture)
+		BOOST_AUTO_TEST_CASE(dictionary_cleaning)
+		{
+			BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict", errorMessage));
+			BOOST_CHECK(dictionary.Find("football"));
+			BOOST_CHECK(dictionary.LoadFromFile("db/clothes.dict", errorMessage));
+			BOOST_CHECK(!dictionary.Find("football"));
+		}
 
 		BOOST_AUTO_TEST_CASE(check_if_file_exists)
 		{
@@ -83,7 +91,7 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 
 	BOOST_AUTO_TEST_SUITE_END()
 
-	struct SportDictionaryFixture : DictionaryLoadFixture
+	struct SportDictionaryFixture : DictionaryFixture
 	{
 		SportDictionaryFixture()
 		{
@@ -102,12 +110,6 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 			BOOST_CHECK(translation);
 			BOOST_CHECK_EQUAL(translation.value(), "хоккей");
 			BOOST_CHECK(!dictionary.Find("tennis"));
-		}
-
-		BOOST_AUTO_TEST_CASE(dictionary_cleaning_every_loading)
-		{
-			BOOST_CHECK(dictionary.LoadFromFile("db/clothes.dict", errorMessage));
-			BOOST_CHECK(!dictionary.Find("football"));
 		}
 
 		BOOST_AUTO_TEST_CASE(can_save_new_translation_in_file)

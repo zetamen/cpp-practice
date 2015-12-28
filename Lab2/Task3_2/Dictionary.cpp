@@ -91,7 +91,7 @@ bool CDictionary::Save(string& errorMessage)
 {
 	if (m_filePath.empty())
 	{
-		errorMessage = "Before save need load file";
+		errorMessage = "Before save need load or create file";
 		return false;
 	}
 	if (m_dictionary.empty() && m_newWords.empty())
