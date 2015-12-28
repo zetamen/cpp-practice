@@ -23,6 +23,12 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 		BOOST_CHECK_EQUAL(errorMessage, "Before save need load file");
 	}
 
+	BOOST_AUTO_TEST_CASE(can_create_new)
+	{
+		string errorMessage;
+		BOOST_CHECK(dictionary.Create("db/new_dict.dict", errorMessage));
+	}
+
 	BOOST_AUTO_TEST_SUITE(after_add_translation)
 		
 		BOOST_AUTO_TEST_CASE(can_find_him)
@@ -54,6 +60,7 @@ BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 		BOOST_AUTO_TEST_CASE(check_if_file_exists)
 		{
 			BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict", errorMessage));
+			BOOST_CHECK(!dictionary.LoadFromFile("db/sport_dont_exists.dict", errorMessage));
 		}
 
 		BOOST_AUTO_TEST_CASE(check_if_database_has_empty_lines)

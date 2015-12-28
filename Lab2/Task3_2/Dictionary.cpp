@@ -42,7 +42,7 @@ bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 	{
 		m_filePath = filePath;
 		m_isNew = true;
-		return true;
+		return false;
 	}
 	std::ifstream file(filePath);
 	if (!file.is_open())
@@ -79,6 +79,11 @@ bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 			return false;
 		}
 	}
+	return true;
+}
+
+bool CDictionary::Create(string const& filePath, string& errorMessage)
+{
 	return true;
 }
 
