@@ -40,8 +40,7 @@ bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 	m_filePath.clear();
 	if (!boost::filesystem::exists(filePath))
 	{
-		m_filePath = filePath;
-		m_isNew = true;
+		errorMessage = "Dictionary is not exists";
 		return false;
 	}
 	std::ifstream file(filePath);
@@ -84,6 +83,21 @@ bool CDictionary::LoadFromFile(string const& filePath, string& errorMessage)
 
 bool CDictionary::Create(string const& filePath, string& errorMessage)
 {
+	m_dictionary.clear();
+	if (boost::filesystem::exists(filePath))
+	{
+		errorMessage = "Dictionary is exists";
+		return false;
+	}
+	std::ofstream file(filePath);
+	if (!file.is_open())
+	{
+		errorMessage = "Could not open file";
+		return false;
+	}
+	file.close();
+	m_filePath = filePath;
+	m_isNew = true;
 	return true;
 }
 
