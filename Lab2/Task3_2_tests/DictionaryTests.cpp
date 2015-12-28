@@ -10,119 +10,104 @@ struct DictionaryFixture
 
 BOOST_FIXTURE_TEST_SUITE(Dictionary, DictionaryFixture)
 
-	BOOST_AUTO_TEST_CASE(can_add_translation)
-	{
-		BOOST_CHECK(dictionary.Add("football", "футбол"));
-		BOOST_CHECK(!dictionary.Add("football", "хоккей"));
-	}
-
-	BOOST_AUTO_TEST_CASE(can_find_translation)
+	BOOST_AUTO_TEST_CASE(cant_find_translation_in_empty_dictionary)
 	{
 		BOOST_CHECK(!dictionary.Find("football"));
-		dictionary.Add("football", "футбол");
-		auto translation = dictionary.Find("football");
-		BOOST_CHECK(translation);
-		BOOST_CHECK_EQUAL(translation.value(), "футбол");
 	}
+
+	BOOST_AUTO_TEST_CASE(cant_save_if_dont_loading)
+	{
+		string errorMessage;
+		CDictionary tempDictionary;
+		BOOST_CHECK(!tempDictionary.Save(errorMessage));
+		BOOST_CHECK_EQUAL(errorMessage, "Before save need load file");
+	}
+
+	BOOST_AUTO_TEST_SUITE(after_add_translation)
+		
+		BOOST_AUTO_TEST_CASE(can_find_him)
+		{
+			BOOST_CHECK(dictionary.Add("football", "футбол"));
+			auto translation = dictionary.Find("football");
+			BOOST_CHECK(translation);
+			BOOST_CHECK_EQUAL(translation.value(), "футбол");
+		}
+
+		BOOST_AUTO_TEST_CASE(cant_add_translation_twice)
+		{
+			BOOST_CHECK(dictionary.Add("football", "футбол"));
+			BOOST_CHECK(!dictionary.Add("football", "хоккей"));
+			auto translation = dictionary.Find("football");
+			BOOST_CHECK(translation);
+			BOOST_CHECK_EQUAL(translation.value(), "футбол");
+		}
+
+	BOOST_AUTO_TEST_SUITE_END()
 
 	struct DictionaryLoadFixture: DictionaryFixture
 	{
 		string errorMessage;
 	};
 
-	BOOST_FIXTURE_TEST_SUITE(can_load_translations_from_file, DictionaryLoadFixture)
+	BOOST_FIXTURE_TEST_SUITE(when_loading, DictionaryLoadFixture)
 
-		BOOST_AUTO_TEST_CASE(if_file_exists)
+		BOOST_AUTO_TEST_CASE(check_if_file_exists)
 		{
 			BOOST_CHECK(dictionary.LoadFromFile("db/sport.dict", errorMessage));
 		}
 
-		BOOST_AUTO_TEST_CASE(save_path_if_file_not_exists)
-		{
-			string errorMessage;
-			BOOST_CHECK(dictionary.LoadFromFile("db/sport_new.dict", errorMessage));
-		}
-
-		BOOST_AUTO_TEST_CASE(signal_if_database_has_empty_lines)
+		BOOST_AUTO_TEST_CASE(check_if_database_has_empty_lines)
 		{
 			BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_empty_lines.dict", errorMessage));
 			BOOST_CHECK_EQUAL(errorMessage, "Database damaged: has empty lines");
 		}
 
-		BOOST_AUTO_TEST_CASE(signal_if_database_has_incorrect_data)
+		BOOST_AUTO_TEST_CASE(check_if_database_has_incorrect_data)
 		{
 			BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_incorrect_data.dict", errorMessage));
 			BOOST_CHECK_EQUAL(errorMessage, "Database damaged: has incorrect data");
 		}
 
-		BOOST_AUTO_TEST_CASE(signal_if_database_has_duplicate_keys)
+		BOOST_AUTO_TEST_CASE(check_if_database_has_duplicate_keys)
 		{
 			BOOST_CHECK(!dictionary.LoadFromFile("db/sport_with_duplicate_keys.dict", errorMessage));
 			BOOST_CHECK_EQUAL(errorMessage, "Database damaged: has duplicate keys");
 		}
 
-		struct SportDictionaryFixture: DictionaryLoadFixture
-		{
-			SportDictionaryFixture()
-			{
-				dictionary.LoadFromFile("db/sport.dict", errorMessage);
-			}
-		};
-
-		BOOST_FIXTURE_TEST_SUITE(when_database_loaded_from_file, SportDictionaryFixture)
-
-			BOOST_AUTO_TEST_CASE(find_translation_from_file)
-			{
-				auto translation = dictionary.Find("football");
-				BOOST_CHECK(translation);
-				BOOST_CHECK_EQUAL(translation.value(), "футбол");
-				translation = dictionary.Find("hockey");
-				BOOST_CHECK(translation);
-				BOOST_CHECK_EQUAL(translation.value(), "хоккей");
-				BOOST_CHECK(!dictionary.Find("tennis"));
-			}
-
-			BOOST_AUTO_TEST_CASE(when_load_again_old_data_is_clear)
-			{
-				BOOST_CHECK(dictionary.LoadFromFile("db/clothes.dict", errorMessage));
-				BOOST_CHECK(!dictionary.Find("football"));
-			}
-
-		BOOST_AUTO_TEST_SUITE_END()
-
 	BOOST_AUTO_TEST_SUITE_END()
 
-	struct SportNewDictionaryFixture: DictionaryLoadFixture
+	struct SportDictionaryFixture : DictionaryLoadFixture
 	{
-		SportNewDictionaryFixture()
+		SportDictionaryFixture()
 		{
-			boost::filesystem::remove("db/sport_new.dict");
-			dictionary.LoadFromFile("db/sport_new.dict", errorMessage);
+			dictionary.LoadFromFile("db/sport.dict", errorMessage);
 		}
 	};
 
-	BOOST_FIXTURE_TEST_SUITE(can_save_translations_to_file, SportNewDictionaryFixture)
+	BOOST_FIXTURE_TEST_SUITE(when_database_loaded, SportDictionaryFixture)
 
-		BOOST_AUTO_TEST_CASE(if_before_load)
+		BOOST_AUTO_TEST_CASE(can_find_loaded_translation)
 		{
-			CDictionary newDictionary;
-			newDictionary.LoadFromFile("db/sport.dict", errorMessage);
-			BOOST_CHECK(newDictionary.Save(errorMessage));
-			CDictionary tempDictionary;
-			BOOST_CHECK(!tempDictionary.Save(errorMessage));
-			BOOST_CHECK_EQUAL(errorMessage, "Before save need load file");
+			auto translation = dictionary.Find("football");
+			BOOST_CHECK(translation);
+			BOOST_CHECK_EQUAL(translation.value(), "футбол");
+			translation = dictionary.Find("hockey");
+			BOOST_CHECK(translation);
+			BOOST_CHECK_EQUAL(translation.value(), "хоккей");
+			BOOST_CHECK(!dictionary.Find("tennis"));
 		}
 
-		BOOST_AUTO_TEST_CASE(cant_save_if_empty)
+		BOOST_AUTO_TEST_CASE(dictionary_cleaning_every_loading)
 		{
-			BOOST_CHECK(!dictionary.Save(errorMessage));
-			BOOST_CHECK_EQUAL(errorMessage, "Dictionary is empty");
+			BOOST_CHECK(dictionary.LoadFromFile("db/clothes.dict", errorMessage));
+			BOOST_CHECK(!dictionary.Find("football"));
 		}
 
-		BOOST_AUTO_TEST_CASE(new_translations)
+		BOOST_AUTO_TEST_CASE(can_save_new_translation_in_file)
 		{
+			boost::filesystem::remove("db/sport_new.dict");
+			dictionary.LoadFromFile("db/sport_new.dict", errorMessage);
 			BOOST_CHECK(dictionary.Add("soccer", "классический футбол"));
-			BOOST_CHECK(dictionary.Add("basketball", "баскетбол"));
 			BOOST_CHECK(dictionary.Save(errorMessage));
 			dictionary.LoadFromFile("db/sport_new.dict", errorMessage);
 			auto translation = dictionary.Find("soccer");
